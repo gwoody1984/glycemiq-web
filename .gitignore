@@ -5,7 +5,7 @@
 .idea/dictionaries
 .idea/**/*.iml
 .idea/misc.xml
-glycemiq_server/config.json
+glycemiq_web/config.json
 **/*.db
 
 # Sensitive or high-churn files:
