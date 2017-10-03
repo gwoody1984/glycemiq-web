@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/glycemiq-web.iml" filepath="$PROJECT_DIR$/.idea/glycemiq-web.iml" />
+      <module fileurl="file://C:\Users\gwoodbury\Source\repos\glycemiq-web\.idea\glycemiq-web.iml" filepath="C:\Users\gwoodbury\Source\repos\glycemiq-web\.idea\glycemiq-web.iml" />
     </modules>
   </component>
 </project>
