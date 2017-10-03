@@ -1,0 +1,13 @@
+// Place a copy of this file named config.json into the glycemiq_server directory
+// to manage local configuration
+{
+  "FLASK": {
+    "DEBUG": false,
+    "SQLALCHEMY_DATABASE_URI": "",
+    "SQLALCHEMY_TRACK_MODIFICATIONS": false
+  },
+  "LOGGING": {
+    "LOG_LEVEL": "DEBUG",
+    "LOG_FORMAT": "%(asctime)s - %(levelname)s - %(module)s:%(name)s:%(lineno)d - %(message)s"
+  }
+}
