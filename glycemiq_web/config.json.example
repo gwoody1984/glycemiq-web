@@ -4,7 +4,8 @@
   "FLASK": {
     "DEBUG": false,
     "SQLALCHEMY_DATABASE_URI": "",
-    "SQLALCHEMY_TRACK_MODIFICATIONS": false
+    "SQLALCHEMY_TRACK_MODIFICATIONS": false,
+    "SECRE_KEY": ""
   },
   "LOGGING": {
     "LOG_LEVEL": "DEBUG",

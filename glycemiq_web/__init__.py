@@ -1,4 +1,4 @@
-from flask import Flask, url_for
+from flask import Flask
 from glycemiq_db import db
 
 from glycemiq_web.config import config_as_obj

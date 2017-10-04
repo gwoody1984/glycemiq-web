@@ -1,25 +1,45 @@
 {% extends "layout.html" %}
+
+{# TODO: should be moved to a different file #}
+{% macro render_field(field, label_visible=true, help_visible=false, help_text="") -%}
+<div class="form-group {% if field.errors %}has-error{% endif %} {{ kwargs.pop('class_', '') }}">
+    {% if field.type != 'HiddenField' and label_visible %}
+        <label for="{{ field.id }}" class="control-label">{{ field.label }}</label>
+    {% endif %}
+    {{ field(class_='form-control', **kwargs) }}
+    {% if help_visible %}
+        <small id="{{ kwargs.get('aria-describedby', '') }}" class="form-text text-muted">{{ help_text }}</small>
+    {% endif %}
+    {% if field.errors %}
+        {% for e in field.errors %}
+            <p class="help-block">{{ e }}</p>
+        {% endfor %}
+    {% endif %}
+</div>
+{%- endmacro %}
+
 {% block title %}Register{% endblock %}
-{% block section_title %}Register{% endblock %}
+{% block section_title %}
+<div class="col-md-4 col-md-offset-4"><h1>Register</h1></div>
+{% endblock %}
 {% block content %}
 <div class="row">
-  <div class="col-md-4 col-md-offset-4">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <form action="/register/submit" method="post">
-          <div class="form-group">
-            <label for="email">Email address</label>
-            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" placeholder="Password">
-          </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-      </div>
+    <div class="col-md-4 col-md-offset-4">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <form action="" method="post">
+                    {{ form.csrf_token }}
+                    {{
+                        render_field(form.email, placeholder='Enter email',
+                        help_visible=true, help_text="We'll never share your email with anyone else.",
+                        **{'aria-describedby':'emailHelp'})
+                    }}
+                    {{ render_field(form.password, placeholder='Password') }}
+                    {{ render_field(form.confirm, placeholder='Re-enter Password') }}
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 {% endblock %}
