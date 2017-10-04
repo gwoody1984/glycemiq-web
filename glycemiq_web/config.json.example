@@ -5,10 +5,18 @@
     "DEBUG": false,
     "SQLALCHEMY_DATABASE_URI": "",
     "SQLALCHEMY_TRACK_MODIFICATIONS": false,
-    "SECRE_KEY": ""
+    "SECRET_KEY": ""
   },
   "LOGGING": {
     "LOG_LEVEL": "DEBUG",
     "LOG_FORMAT": "%(asctime)s - %(levelname)s - %(module)s:%(name)s:%(lineno)d - %(message)s"
+  },
+  "APP": {
+    "MAIL_SERVER": "",
+    "MAIL_PORT": 0,
+    "MAIL_USER": "",
+    "MAIL_PASSWORD": "",
+    "URL_SERIALIZER_KEY": "",
+    "URL_SERIALIZER_SALT": ""
   }
 }
