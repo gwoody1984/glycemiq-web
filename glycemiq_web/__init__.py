@@ -1,6 +1,7 @@
 from flask import Flask
-from glycemiq_db import db
+from flask_login import LoginManager
 
+from glycemiq_db import db
 from glycemiq_web.config import config_as_obj
 
 
@@ -9,7 +10,15 @@ def create_app():
     app.config.from_object(config_as_obj('FLASK'))
     db.init_app(app)
 
+    login_manager = LoginManager()
+    login_manager.session_protection = "strong"
+    login_manager.login_view = "account.login"
+    login_manager.init_app(app)
+
     from .account import account as account_blueprint
     app.register_blueprint(account_blueprint)
+
+    from .portal import portal as portal_blueprint
+    app.register_blueprint(portal_blueprint, url_prefix='/portal')
 
     return app

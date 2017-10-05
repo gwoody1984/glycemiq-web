@@ -1,10 +1,11 @@
 import bcrypt
 
-from flask import render_template, url_for, abort, redirect
+from flask import render_template, url_for, abort, redirect, flash
 from itsdangerous import URLSafeTimedSerializer
 
 from . import account
 from .register_form import RegisterForm
+from .login_form import LoginForm
 from ..emailer import send_mail
 from ..config import config_as_dict
 from glycemiq_db import db, User
@@ -58,9 +59,28 @@ def register():
     return render_template('register.html', form=form)
 
 
-@account.route('/login')
+@account.route('/login', methods=['GET','POST'])
 def login():
-    return render_template('login.html')
+    form = LoginForm()
+    if form.validate_on_submit():
+
+        # make sure the user exists
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+
+            # check the password hash
+            salt = user.password[:29]
+            actual_password = user.password[29:]
+            password_hash = bcrypt.hashpw(form.password.data.encode('utf-8'), salt=salt)
+
+            if actual_password == password_hash:
+                return redirect(url_for('portal.home'))
+            else:
+                flash('Email or password are incorrect.', 'danger')
+        else:
+            flash('Email or password are incorrect.', 'danger')
+
+    return render_template('login.html', form=form)
 
 
 @account.route('/confirm/<token>')
@@ -77,4 +97,5 @@ def confirm_email(token):
     db.session.add(user)
     db.session.commit()
 
-    return redirect(url_for('login'))
+    flash('Your email has been confirmed.', 'success')
+    return redirect(url_for('account.login'))
