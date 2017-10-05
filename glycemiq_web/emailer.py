@@ -16,7 +16,7 @@ def send_mail(to_address, message_subject, message_body):
     msg['From'] = user
     msg['To'] = to_address
     msg['Subject'] = message_subject
-    msg.attach(MIMEText(message_body))
+    msg.attach(MIMEText(message_body, 'html'))
 
     mail_server = smtplib.SMTP(config['MAIL_SERVER'], config['MAIL_PORT'])
     mail_server.ehlo()
