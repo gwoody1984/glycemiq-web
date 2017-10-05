@@ -28,8 +28,12 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav navbar-right">
-                    <li {% if request.path=='/register' %}class="active"{% endif %}><a href="/register">Register</a></li>
-                    <li {% if request.path=='/login' %}class="active"{% endif %}><a href="/login">Login</a></li>
+                    {% if current_user.is_authenticated %}
+                        <li><a href="/logout">Logout</a></li>
+                    {% else %}
+                        <li {% if request.path=='/register' %}class="active"{% endif %}><a href="/register">Register</a></li>
+                        <li {% if request.path=='/login' %}class="active"{% endif %}><a href="/login">Login</a></li>
+                    {% endif %}
                 </ul>
             </div><!--/.navbar-collapse -->
           </div>

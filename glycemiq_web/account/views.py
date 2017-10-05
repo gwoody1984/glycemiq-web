@@ -1,6 +1,7 @@
 import bcrypt
 
-from flask import render_template, url_for, abort, redirect, flash
+from flask import render_template, url_for, abort, redirect, flash, request
+from flask_login import login_user, logout_user, current_user
 from itsdangerous import URLSafeTimedSerializer
 
 from . import account
@@ -9,18 +10,22 @@ from .login_form import LoginForm
 from ..emailer import send_mail
 from ..config import config_as_dict
 from glycemiq_db import db, User
+from glycemiq_web import login_manager
 
 config = config_as_dict('APP')
 ts = URLSafeTimedSerializer(config['URL_SERIALIZER_KEY'])
 
 
-@account.route('/')
-def index():
-    return render_template('index.html')
+@login_manager.user_loader
+def load_user(userid):
+    return User.query.get(int(userid))
 
 
 @account.route('/register', methods=['GET', 'POST'])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('portal.home'))
+
     form = RegisterForm()
     if form.validate_on_submit():
 
@@ -59,8 +64,12 @@ def register():
     return render_template('register.html', form=form)
 
 
-@account.route('/login', methods=['GET','POST'])
+@account.route('/', methods=['GET', 'POST'])
+@account.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('portal.home'))
+
     form = LoginForm()
     if form.validate_on_submit():
 
@@ -74,13 +83,20 @@ def login():
             password_hash = bcrypt.hashpw(form.password.data.encode('utf-8'), salt=salt)
 
             if actual_password == password_hash:
-                return redirect(url_for('portal.home'))
+                login_user(user)
+                return redirect(request.args.get('next') or url_for('portal.home'))
             else:
                 flash('Email or password are incorrect.', 'danger')
         else:
             flash('Email or password are incorrect.', 'danger')
 
     return render_template('login.html', form=form)
+
+
+@account.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('account.login'))
 
 
 @account.route('/confirm/<token>')
